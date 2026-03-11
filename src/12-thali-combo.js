@@ -54,10 +54,25 @@
  */
 export function createThaliDescription(thali) {
   // Your code here
+  if(typeof thali !== 'object'|| thali === null || Array.isArray(thali) || !(thali.name && thali.items && thali.price && typeof(thali.isVeg)==='boolean')){
+    return ""
+  }else return `${thali.name.toUpperCase()} ${thali.isVeg?"Veg":"Non-Veg"} - Items: ${thali.items.join(", ")} - Rs. ${items.price.toFixed(2)}`
 }
 
 export function getThaliStats(thalis) {
   // Your code here
+  if(Array.isArray(thalis) && thalis.length != 0){
+    let total = thalis.length;
+    let veg = thalis.filter(a => a.isVeg).length
+    let nonveg = total - veg;
+    let totalP = thalis.reduce((acc, curr)=> acc += curr.price,0)
+    let avg = (totalP/total).toFixed(2)
+    let pArray = thalis.map(a=> a.price)
+    let cheapest = Math.min(...pArray)
+    let costliest = Math.max(...pArray)
+    let items = thalis.map(a=>a.name)
+    return { total, veg, nonveg, avg, cheapest, costliest, items}
+  }else return null;
 }
 
 export function searchThaliMenu(thalis, query) {
