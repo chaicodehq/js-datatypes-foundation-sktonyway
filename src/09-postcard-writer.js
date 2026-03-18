@@ -60,7 +60,10 @@ export function writePostcard(sender, receiver, message) {
 
 export function isValidPincode(code) {
   // Your code here
-  let regex = /^\d+$/
+  if(typeof code === 'string' && code.trim().length === 6 && !code.startsWith(0)){
+    let regex = /^\d+$/;
+    return regex.test(code);
+  } else return false;
 }
 
 export function formatPostcardField(label, value, width=12) {
@@ -77,4 +80,8 @@ export function isFromState(address, stateCode) {
 
 export function countVowels(message) {
   // Your code here
+  if(typeof message === 'string' && message.trim()!= ''){
+    return (message.match(/[aeiou]/gi) || []).length
+    // '' was added as it was returning null instead of 0
+  } else return 0;
 }

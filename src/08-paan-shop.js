@@ -66,8 +66,8 @@ export function updatePrices(menu, increase) {
   // Your code here
   if (typeof menu === "object" && menu !== null && !Array.isArray(menu) && typeof increase === 'number') {
     let myArray = Object.entries(menu);
-    let increased = myArray.map(a => a[1] += increase)
-    return Object.fromEntries(increased)
+    myArray.forEach(a => a[1] += increase);
+    return Object.fromEntries(myArray)
   } else return {}
 }
 

@@ -84,8 +84,8 @@ export function removeRationCard(registry, cardId) {
   // Your code here
   if(typeof registry === 'object' && registry !== null && !Array.isArray(registry) && typeof cardId === 'string' && cardId.trim().length != 0){
     if (registry.hasOwnProperty(cardId)){
-      delete registry.cardId;
-
+      delete registry[cardId];
+      return true;
     }else return false;
   }else return false;
 }

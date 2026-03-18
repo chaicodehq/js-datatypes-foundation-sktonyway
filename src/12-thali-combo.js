@@ -56,29 +56,52 @@ export function createThaliDescription(thali) {
   // Your code here
   if(typeof thali !== 'object'|| thali === null || Array.isArray(thali) || !(thali.name && thali.items && thali.price && typeof(thali.isVeg)==='boolean')){
     return ""
-  }else return `${thali.name.toUpperCase()} ${thali.isVeg?"Veg":"Non-Veg"} - Items: ${thali.items.join(", ")} - Rs. ${items.price.toFixed(2)}`
+  } else {
+    let name = thali.name.toUpperCase();
+    let veg_ = thali.isVeg? "(Veg)": "(Non-Veg)";
+    let items = thali.items.join(", ");
+    let price = thali.price.toFixed(2)
+    return `${name} ${veg_} - Items: ${items} - Rs.${price}`
+  }
 }
 
 export function getThaliStats(thalis) {
   // Your code here
-  if(Array.isArray(thalis) && thalis.length != 0){
+  if(Array.isArray(thalis) && thalis.length > 0){
     let total = thalis.length;
     let veg = thalis.filter(a => a.isVeg).length
     let nonveg = total - veg;
     let totalP = thalis.reduce((acc, curr)=> acc += curr.price,0)
     let avg = (totalP/total).toFixed(2)
     let pArray = thalis.map(a=> a.price)
-    let cheapest = Math.min(...pArray)
-    let costliest = Math.max(...pArray)
+    let Cheapest = Math.min(...pArray)
+    let Costliest = Math.max(...pArray)
     let items = thalis.map(a=>a.name)
-    return { total, veg, nonveg, avg, cheapest, costliest, items}
+    return { totalThalis: total, vegCount: veg, nonVegCount: nonveg, avgPrice: avg, cheapest: Cheapest, costliest: Costliest, names: items}
   }else return null;
 }
 
 export function searchThaliMenu(thalis, query) {
   // Your code here
-}
+  if(!Array.isArray(thalis) || typeof query != 'string'){return []}
+  else {
+    const q = query.toLowerCase();
+
+  return thalis.filter((thali) => {
+    const nameMatch = thali.name.toLowerCase().includes(q);
+    const itemMatch = thali.items.some((item) =>
+      item.toLowerCase().includes(q),
+    );
+    return nameMatch || itemMatch;
+  });
+  }}
 
 export function generateThaliReceipt(customerName, thalis) {
   // Your code here
+  if(typeof customerName != 'string' || !Array.isArray(thalis) || thalis.length <= 0){return ''}
+  else {
+    let lines = thalis.map(thali => `- ${thali.name} x Rs.${thali.price}`).join('\n');
+    let total = thalis.reduce((acc, curr)=> acc+curr.price, 0).toFixed(2)
+    return `THALI RECEIPT\n---\nCustomer: ${customerName.toUpperCase()}\n${lines}\n---\nTotal: Rs.${total}\nItems: ${thalis.length}`
+  }
 }
